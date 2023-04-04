@@ -1,0 +1,348 @@
+<template>
+    <div class="main">
+        <form action="/register" method="POST" class="form" id="form-1">
+        <h3 class="heading">Thành viên đăng ký</h3>
+
+        <div class="spacer"></div>
+
+        <div class="form-group">
+            <label for="fullname" class="form-label">Tên đầy đủ</label>
+            <input id="fullname" name="fullname" type="text" placeholder="VD: Sơn Đặng" class="form-control">
+            <span class="form-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
+            <span class="form-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="form-label">Mật khẩu</label>
+            <input id="password" name="password" type="password" placeholder="Nhập mật khẩu" class="form-control">
+            <span class="form-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="password_confirmation" class="form-label">Nhập lại mật khẩu</label>
+            <input id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu" type="password" class="form-control">
+            <span class="form-message"></span>
+        </div>
+
+        <button type="submit" class="form-submit">Đăng ký</button>
+        </form>
+    </div>
+  
+</template>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Mong muốn của chúng ta
+  Validator({
+    form: '#form-1',
+    formGroupSelector: '.form-group',
+    errorSelector: '.form-message',
+    rules: [
+      Validator.isRequired('#fullname', 'Vui lòng nhập tên đầy đủ của bạn'),
+      Validator.isEmail('#email'),
+      Validator.minLength('#password', 6),
+      Validator.isRequired('#password_confirmation'),
+      Validator.isConfirmed('#password_confirmation', function () {
+        return document.querySelector('#form-1 #password').value;
+      }, 'Mật khẩu nhập lại không chính xác')
+    ],
+    onSubmit: function (data) {
+      // Call API
+      console.log(data);
+    }
+  });
+
+
+});
+
+
+
+// Đối tượng `Validator`
+function Validator(options) {
+    function getParent(element, selector) {
+        while (element.parentElement) {
+            if (element.parentElement.matches(selector)) {
+                return element.parentElement;
+            }
+            element = element.parentElement;
+        }
+    }
+
+    var selectorRules = {};
+
+    // Hàm thực hiện validate
+    function validate(inputElement, rule) {
+        var errorElement = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
+        var errorMessage;
+
+        // Lấy ra các rules của selector
+        var rules = selectorRules[rule.selector];
+        
+        // Lặp qua từng rule & kiểm tra
+        // Nếu có lỗi thì dừng việc kiểm
+        for (var i = 0; i < rules.length; ++i) {
+            switch (inputElement.type) {
+                case 'radio':
+                case 'checkbox':
+                    errorMessage = rules[i](
+                        formElement.querySelector(rule.selector + ':checked')
+                    );
+                    break;
+                default:
+                    errorMessage = rules[i](inputElement.value);
+            }
+            if (errorMessage) break;
+        }
+        
+        if (errorMessage) {
+            errorElement.innerText = errorMessage;
+            getParent(inputElement, options.formGroupSelector).classList.add('invalid');
+        } else {
+            errorElement.innerText = '';
+            getParent(inputElement, options.formGroupSelector).classList.remove('invalid');
+        }
+
+        return !errorMessage;
+    }
+
+    // Lấy element của form cần validate
+    var formElement = document.querySelector(options.form);
+    if (formElement) {
+        // Khi submit form
+        formElement.onsubmit = function (e) {
+            e.preventDefault();
+
+            var isFormValid = true;
+
+            // Lặp qua từng rules và validate
+            options.rules.forEach(function (rule) {
+                var inputElement = formElement.querySelector(rule.selector);
+                var isValid = validate(inputElement, rule);
+                if (!isValid) {
+                    isFormValid = false;
+                }
+            });
+
+            if (isFormValid) {
+                // Trường hợp submit với javascript
+                if (typeof options.onSubmit === 'function') {
+                    var enableInputs = formElement.querySelectorAll('[name]');
+                    var formValues = Array.from(enableInputs).reduce(function (values, input) {
+                        
+                        switch(input.type) {
+                            case 'radio':
+                                values[input.name] = formElement.querySelector('input[name="' + input.name + '"]:checked').value;
+                                break;
+                            case 'checkbox':
+                                if (!input.matches(':checked')) {
+                                    values[input.name] = '';
+                                    return values;
+                                }
+                                if (!Array.isArray(values[input.name])) {
+                                    values[input.name] = [];
+                                }
+                                values[input.name].push(input.value);
+                                break;
+                            case 'file':
+                                values[input.name] = input.files;
+                                break;
+                            default:
+                                values[input.name] = input.value;
+                        }
+
+                        return values;
+                    }, {});
+                    options.onSubmit(formValues);
+                }
+                // Trường hợp submit với hành vi mặc định
+                else {
+                    formElement.submit();
+                }
+            }
+        }
+
+        // Lặp qua mỗi rule và xử lý (lắng nghe sự kiện blur, input, ...)
+        options.rules.forEach(function (rule) {
+
+            // Lưu lại các rules cho mỗi input
+            if (Array.isArray(selectorRules[rule.selector])) {
+                selectorRules[rule.selector].push(rule.test);
+            } else {
+                selectorRules[rule.selector] = [rule.test];
+            }
+
+            var inputElements = formElement.querySelectorAll(rule.selector);
+
+            Array.from(inputElements).forEach(function (inputElement) {
+               // Xử lý trường hợp blur khỏi input
+                inputElement.onblur = function () {
+                    validate(inputElement, rule);
+                }
+
+                // Xử lý mỗi khi người dùng nhập vào input
+                inputElement.oninput = function () {
+                    var errorElement = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
+                    errorElement.innerText = '';
+                    getParent(inputElement, options.formGroupSelector).classList.remove('invalid');
+                } 
+            });
+        });
+    }
+
+}
+
+
+
+// Định nghĩa rules
+// Nguyên tắc của các rules:
+// 1. Khi có lỗi => Trả ra message lỗi
+// 2. Khi hợp lệ => Không trả ra cái gì cả (undefined)
+Validator.isRequired = function (selector, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            return value ? undefined :  message || 'Vui lòng nhập trường này'
+        }
+    };
+}
+
+Validator.isEmail = function (selector, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            return regex.test(value) ? undefined :  message || 'Trường này phải là email';
+        }
+    };
+}
+
+Validator.minLength = function (selector, min, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            return value.length >= min ? undefined :  message || `Vui lòng nhập tối thiểu ${min} kí tự`;
+        }
+    };
+}
+
+Validator.isConfirmed = function (selector, getConfirmValue, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            return value === getConfirmValue() ? undefined : message || 'Giá trị nhập vào không chính xác';
+        }
+    }
+}
+
+
+
+export default {
+
+}
+</script>
+
+<style scoped>
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+html {
+    color: #333;
+    font-size: 62.5%;
+    font-family: 'Open Sans', sans-serif;
+}
+.main {
+    background: #f1f1f1;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+.form {
+    width: 360px;
+    min-height: 100px;
+    padding: 32px 24px;
+    text-align: center;
+    background: #fff;
+    border-radius: 2px;
+    margin: 24px;
+    align-self: center;
+    box-shadow: 0 2px 5px 0 rgba(51,62,73,.1);
+}
+.form .heading {
+    font-size: 2rem;
+}
+
+
+.form-group {
+    display: flex;
+    margin-bottom: 16px;
+    flex-direction: column;
+}
+
+.form-label,
+.form-message {
+    text-align: left;
+}
+
+.form-label {
+    font-weight: 700;
+    padding-bottom: 6px;
+    line-height: 1.8rem;
+    font-size: 1.4rem;
+}
+
+.form-control {
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #b3b3b3;
+    border-radius: 3px;
+    outline: none;
+    font-size: 1.4rem;
+}
+
+.form-control:hover {
+    border-color: #1dbfaf;
+}
+
+.form-group.invalid .form-control {
+    border-color: #f33a58;
+}
+
+.form-group.invalid .form-message {
+    color: #f33a58;
+}
+
+.form-message {
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    padding: 4px 0 0;
+}
+
+.form-submit {
+    outline: none;
+    background-color: #1dbfaf;
+    margin-top: 12px;
+    padding: 12px 16px;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    width: 100%;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.form-submit:hover {
+    background-color: #1ac7b6;
+}
+
+.spacer {
+    margin-top: 36px;
+}
+</style>
