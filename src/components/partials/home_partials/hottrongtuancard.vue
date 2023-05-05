@@ -16,7 +16,7 @@ export default{
 </script>
 
 <template>
-  <div class="col-4">
+  <div class="col-3">
      <div class="page-wrapper">
     <div class="page-inner">
         <div class="row">

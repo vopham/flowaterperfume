@@ -1,39 +1,5 @@
 <script>
 
-$(document).ready(function () {
-var count = 0;
-
-$(".tarot-card").click(function() {
-  var card = $(this);
-  if(count < 4) {
-
-   $(this).removeClass("top").addClass("bottom");
-    
-    count++;
-  }
-  if(count == 4) {
-   $("div").removeClass("bottom");
-    
-    count = 0;
-  }
-  shuffle(card);
-});
-});
-
-function shuffle(card) {
-    TweenLite.fromTo(
-        card, 
-        0.6, 
-        {
-        x:160, 
-        y:-15, 
-        ease: Expo.easeOut}, 
-        {
-        x:0,
-        y:0,
-        ease: Expo.easeIn});
-};
-
     export default{
         name: 'five_content'
     }
@@ -57,9 +23,10 @@ function shuffle(card) {
                             <div class="row">
                                 <div class="col-5">
                                     <div class="container_title">
-                                        <div class="title">Collections</div>
-                                        <p>Smooth hover effect achieved by using variable fonts.</p>
-                                        <p>Write your own words to try it out.</p>
+                                        <div class="title">Bộ sưu tập</div>
+                                        <p class="textt">Nước hoa chính là chiếc chìa khóa mở ra thế giới cảm xúc của bạn.</p>
+                                        <p class="textt">Lựa chọn mùi hương thể hiện phong cách</p>
+                                        <p class="textt">Khơi dậy cảm xúc với hương thơm từ nước hoa của chúng tôi.</p>
                                     </div>
                                 </div>
                                 <div class="col-7">
@@ -69,27 +36,7 @@ function shuffle(card) {
 
 
 
-                            <!-- <div class="containerrr">
-                               
-                                <div class="tarot-card shuffle">
-                                <img class="img2" src="https://cdn.pixabay.com/photo/2021/02/15/07/52/hermit-6016941_960_720.jpg">
-                                </div>
-
-                               
-                                <div class="tarot-card shuffle">
-                                <img class="img2" src="https://cdn.pixabay.com/photo/2021/02/15/07/42/temperance-6016917_960_720.jpg">
-                                </div>
-
-                           
-                                <div class="tarot-card shuffle">
-                                <img class="img2" src="https://cdn.pixabay.com/photo/2021/02/15/07/52/hanged-man-6016939_960_720.jpg">
-                                </div>
-
-                               
-                                <div class="tarot-card shuffle">
-                                <img class="img2" src="https://cdn.pixabay.com/photo/2021/02/15/07/53/hierophant-6016942_960_720.jpg">
-                                </div>
-                            </div> -->
+                   
                     </article>
                 </div>
             </div>
@@ -100,7 +47,10 @@ function shuffle(card) {
 </template>
 
 <style scoped>
-
+.textt{
+  font-family: 'Josefin_Sans';
+  font-size: 20px;
+}
 .container_five{
     margin-top: 20px;
     height: 600px;

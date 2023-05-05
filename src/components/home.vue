@@ -42,9 +42,9 @@
         <div class="five_content">  
             <Five_content/>
         </div>
-        <div class="six_content">  
+        <!-- <div class="six_content">  
             <Six_content/>
-        </div>
+        </div> -->
         <div class="seven_content">  
             <Seven_content/>
         </div>

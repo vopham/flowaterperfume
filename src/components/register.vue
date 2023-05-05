@@ -1,348 +1,247 @@
 <template>
-    <div class="main">
-        <form action="/register" method="POST" class="form" id="form-1">
-        <h3 class="heading">Thành viên đăng ký</h3>
+    <div class="big_container">
+        <div class="containerr">
+            <div class="screen">
+                <div class="screen__content">
+                    <form @submit.prevent="register" class="login">
+                        <div class="login__field">
+                            
+                            <input v-model="name" type="text" class="login__input" placeholder="Họ và tên">
+                        </div>
+                        <div class="login__field">
+                           
+                            <input v-model="email" type="email" class="login__input" placeholder="Email">
+                        </div>
+                        <div class="login__field">
+                            
+                            <input v-model="pass" type="password" class="login__input" placeholder="Password">
+                        </div>
+                        <button class="button login__submit">
+                            <span class="button__text">Đăng ký</span>
+                        </button>				
+                    </form>
 
-        <div class="spacer"></div>
-
-        <div class="form-group">
-            <label for="fullname" class="form-label">Tên đầy đủ</label>
-            <input id="fullname" name="fullname" type="text" placeholder="VD: Sơn Đặng" class="form-control">
-            <span class="form-message"></span>
+                </div>
+                <div class="screen__background">
+                    <span class="screen__background__shape screen__background__shape4"></span>
+                    <span class="screen__background__shape screen__background__shape3"></span>		
+                    <span class="screen__background__shape screen__background__shape2"></span>
+                    <span class="screen__background__shape screen__background__shape1"></span>
+                </div>		
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="email" class="form-label">Email</label>
-            <input id="email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
-            <span class="form-message"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="password" class="form-label">Mật khẩu</label>
-            <input id="password" name="password" type="password" placeholder="Nhập mật khẩu" class="form-control">
-            <span class="form-message"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="password_confirmation" class="form-label">Nhập lại mật khẩu</label>
-            <input id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu" type="password" class="form-control">
-            <span class="form-message"></span>
-        </div>
-
-        <button type="submit" class="form-submit">Đăng ký</button>
-        </form>
-    </div>
-  
+    </div> 	
 </template>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  // Mong muốn của chúng ta
-  Validator({
-    form: '#form-1',
-    formGroupSelector: '.form-group',
-    errorSelector: '.form-message',
-    rules: [
-      Validator.isRequired('#fullname', 'Vui lòng nhập tên đầy đủ của bạn'),
-      Validator.isEmail('#email'),
-      Validator.minLength('#password', 6),
-      Validator.isRequired('#password_confirmation'),
-      Validator.isConfirmed('#password_confirmation', function () {
-        return document.querySelector('#form-1 #password').value;
-      }, 'Mật khẩu nhập lại không chính xác')
-    ],
-    onSubmit: function (data) {
-      // Call API
-      console.log(data);
-    }
-  });
-
-
-});
-
-
-
-// Đối tượng `Validator`
-function Validator(options) {
-    function getParent(element, selector) {
-        while (element.parentElement) {
-            if (element.parentElement.matches(selector)) {
-                return element.parentElement;
-            }
-            element = element.parentElement;
-        }
-    }
-
-    var selectorRules = {};
-
-    // Hàm thực hiện validate
-    function validate(inputElement, rule) {
-        var errorElement = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
-        var errorMessage;
-
-        // Lấy ra các rules của selector
-        var rules = selectorRules[rule.selector];
-        
-        // Lặp qua từng rule & kiểm tra
-        // Nếu có lỗi thì dừng việc kiểm
-        for (var i = 0; i < rules.length; ++i) {
-            switch (inputElement.type) {
-                case 'radio':
-                case 'checkbox':
-                    errorMessage = rules[i](
-                        formElement.querySelector(rule.selector + ':checked')
-                    );
-                    break;
-                default:
-                    errorMessage = rules[i](inputElement.value);
-            }
-            if (errorMessage) break;
-        }
-        
-        if (errorMessage) {
-            errorElement.innerText = errorMessage;
-            getParent(inputElement, options.formGroupSelector).classList.add('invalid');
-        } else {
-            errorElement.innerText = '';
-            getParent(inputElement, options.formGroupSelector).classList.remove('invalid');
-        }
-
-        return !errorMessage;
-    }
-
-    // Lấy element của form cần validate
-    var formElement = document.querySelector(options.form);
-    if (formElement) {
-        // Khi submit form
-        formElement.onsubmit = function (e) {
-            e.preventDefault();
-
-            var isFormValid = true;
-
-            // Lặp qua từng rules và validate
-            options.rules.forEach(function (rule) {
-                var inputElement = formElement.querySelector(rule.selector);
-                var isValid = validate(inputElement, rule);
-                if (!isValid) {
-                    isFormValid = false;
-                }
-            });
-
-            if (isFormValid) {
-                // Trường hợp submit với javascript
-                if (typeof options.onSubmit === 'function') {
-                    var enableInputs = formElement.querySelectorAll('[name]');
-                    var formValues = Array.from(enableInputs).reduce(function (values, input) {
-                        
-                        switch(input.type) {
-                            case 'radio':
-                                values[input.name] = formElement.querySelector('input[name="' + input.name + '"]:checked').value;
-                                break;
-                            case 'checkbox':
-                                if (!input.matches(':checked')) {
-                                    values[input.name] = '';
-                                    return values;
-                                }
-                                if (!Array.isArray(values[input.name])) {
-                                    values[input.name] = [];
-                                }
-                                values[input.name].push(input.value);
-                                break;
-                            case 'file':
-                                values[input.name] = input.files;
-                                break;
-                            default:
-                                values[input.name] = input.value;
-                        }
-
-                        return values;
-                    }, {});
-                    options.onSubmit(formValues);
-                }
-                // Trường hợp submit với hành vi mặc định
-                else {
-                    formElement.submit();
-                }
-            }
-        }
-
-        // Lặp qua mỗi rule và xử lý (lắng nghe sự kiện blur, input, ...)
-        options.rules.forEach(function (rule) {
-
-            // Lưu lại các rules cho mỗi input
-            if (Array.isArray(selectorRules[rule.selector])) {
-                selectorRules[rule.selector].push(rule.test);
-            } else {
-                selectorRules[rule.selector] = [rule.test];
-            }
-
-            var inputElements = formElement.querySelectorAll(rule.selector);
-
-            Array.from(inputElements).forEach(function (inputElement) {
-               // Xử lý trường hợp blur khỏi input
-                inputElement.onblur = function () {
-                    validate(inputElement, rule);
-                }
-
-                // Xử lý mỗi khi người dùng nhập vào input
-                inputElement.oninput = function () {
-                    var errorElement = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
-                    errorElement.innerText = '';
-                    getParent(inputElement, options.formGroupSelector).classList.remove('invalid');
-                } 
-            });
-        });
-    }
-
-}
-
-
-
-// Định nghĩa rules
-// Nguyên tắc của các rules:
-// 1. Khi có lỗi => Trả ra message lỗi
-// 2. Khi hợp lệ => Không trả ra cái gì cả (undefined)
-Validator.isRequired = function (selector, message) {
-    return {
-        selector: selector,
-        test: function (value) {
-            return value ? undefined :  message || 'Vui lòng nhập trường này'
-        }
-    };
-}
-
-Validator.isEmail = function (selector, message) {
-    return {
-        selector: selector,
-        test: function (value) {
-            var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            return regex.test(value) ? undefined :  message || 'Trường này phải là email';
-        }
-    };
-}
-
-Validator.minLength = function (selector, min, message) {
-    return {
-        selector: selector,
-        test: function (value) {
-            return value.length >= min ? undefined :  message || `Vui lòng nhập tối thiểu ${min} kí tự`;
-        }
-    };
-}
-
-Validator.isConfirmed = function (selector, getConfirmValue, message) {
-    return {
-        selector: selector,
-        test: function (value) {
-            return value === getConfirmValue() ? undefined : message || 'Giá trị nhập vào không chính xác';
-        }
-    }
-}
-
-
+import axios from 'axios';
 
 export default {
-
+    data(){
+        return{
+            name: '',
+            email: '',
+            pass: ''
+        }
+    },
+    methods:{
+    register(){
+        const data = {
+            name: this.name,
+            email: this.email,
+            pass: this.pass
+        }
+        axios.post('http://localhost:3000/user/register', data)
+            .then( res => {
+                console.log(res);
+				this.$router.push('/login')
+            })
+            .catch( err => {
+                console.log(err);
+            })
+    },
+   }
 }
 </script>
 
 <style scoped>
+.big_container{
+ background: linear-gradient(90deg, #dfdeec, #faf9ff);
+}
+
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-html {
-    color: #333;
-    font-size: 62.5%;
-    font-family: 'Open Sans', sans-serif;
-}
-.main {
-    background: #f1f1f1;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-}
-.form {
-    width: 360px;
-    min-height: 100px;
-    padding: 32px 24px;
-    text-align: center;
-    background: #fff;
-    border-radius: 2px;
-    margin: 24px;
-    align-self: center;
-    box-shadow: 0 2px 5px 0 rgba(51,62,73,.1);
-}
-.form .heading {
-    font-size: 2rem;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;	
+	font-family: Raleway, sans-serif;
 }
 
 
-.form-group {
-    display: flex;
-    margin-bottom: 16px;
-    flex-direction: column;
+.containerr {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
 }
 
-.form-label,
-.form-message {
-    text-align: left;
+.screen {		
+	background: linear-gradient(90deg, #717075, #d9d8e2);		
+	position: relative;	
+	height: 600px;
+	width: 360px;	
+	box-shadow: 0px 0px 24px #83809b;
 }
 
-.form-label {
-    font-weight: 700;
-    padding-bottom: 6px;
-    line-height: 1.8rem;
-    font-size: 1.4rem;
+.screen__content {
+	z-index: 1;
+	position: relative;	
+	height: 100%;
 }
 
-.form-control {
-    height: 40px;
-    padding: 8px 12px;
-    border: 1px solid #b3b3b3;
-    border-radius: 3px;
-    outline: none;
-    font-size: 1.4rem;
+.screen__background {		
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	-webkit-clip-path: inset(0 0 0 0);
+	clip-path: inset(0 0 0 0);	
 }
 
-.form-control:hover {
-    border-color: #1dbfaf;
+.screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
 }
 
-.form-group.invalid .form-control {
-    border-color: #f33a58;
+.screen__background__shape1 {
+	height: 520px;
+	width: 520px;
+	background: #FFF;	
+	top: -50px;
+	right: 120px;	
+	border-radius: 0 72px 0 0;
 }
 
-.form-group.invalid .form-message {
-    color: #f33a58;
+.screen__background__shape2 {
+	height: 220px;
+	width: 220px;
+	background: #c6c5cb;	
+	top: -172px;
+	right: 0;	
+	border-radius: 32px;
 }
 
-.form-message {
-    font-size: 1.2rem;
-    line-height: 1.6rem;
-    padding: 4px 0 0;
+.screen__background__shape3 {
+	height: 540px;
+	width: 190px;
+	background: linear-gradient(270deg, #f6f6f6, #ebeaff);
+	top: -24px;
+	right: 0;	
+	border-radius: 32px;
 }
 
-.form-submit {
-    outline: none;
-    background-color: #1dbfaf;
-    margin-top: 12px;
-    padding: 12px 16px;
-    font-weight: 600;
-    color: #fff;
-    border: none;
-    width: 100%;
-    font-size: 14px;
-    border-radius: 8px;
-    cursor: pointer;
+.screen__background__shape4 {
+	height: 400px;
+	width: 200px;
+	background: #f0efff;	
+	top: 420px;
+	right: 50px;	
+	border-radius: 60px;
 }
 
-.form-submit:hover {
-    background-color: #1ac7b6;
+.login {
+	width: 320px;
+	padding: 30px;
+	padding-top: 156px;
 }
 
-.spacer {
-    margin-top: 36px;
+.login__field {
+	padding: 20px 0px;	
+	position: relative;	
 }
+
+.login__icon {
+	position: absolute;
+	top: 30px;
+	color: #7875B5;
+}
+
+.login__input {
+	border: none;
+	border-bottom: 2px solid #D1D1D4;
+	background: none;
+	padding: 10px;
+	padding-left: 24px;
+	font-weight: 700;
+	width: 75%;
+	transition: .2s;
+}
+
+.login__input:active,
+.login__input:focus,
+.login__input:hover {
+	outline: none;
+	border-bottom-color: #6A679E;
+}
+
+.login__submit {
+	background: #fff;
+	font-size: 14px;
+	margin-top: 30px;
+	padding: 16px 20px;
+	border-radius: 26px;
+	border: 1px solid #D4D3E8;
+	text-transform: uppercase;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	color: #4C489D;
+	box-shadow: 0px 2px 2px #5C5696;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.login__submit:active,
+.login__submit:focus,
+.login__submit:hover {
+	border-color: #6A679E;
+	outline: none;
+}
+
+.button__icon {
+	font-size: 24px;
+	margin-left: auto;
+	color: #7875B5;
+}
+
+.social-login {	
+	position: absolute;
+	height: 140px;
+	width: 160px;
+	text-align: center;
+	bottom: 0px;
+	right: 0px;
+	color: #fff;
+}
+
+.social-icons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.social-login__icon {
+	padding: 20px 10px;
+	color: #fff;
+	text-decoration: none;	
+	text-shadow: 0px 0px 8px #7875B5;
+}
+
+.social-login__icon:hover {
+	transform: scale(1.5);	
+}
+
 </style>
+

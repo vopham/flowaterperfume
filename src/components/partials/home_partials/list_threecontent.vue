@@ -1,9 +1,10 @@
 <template>
         <div class="owl-carousel mt-3 mb-3">
-            <threecontent_card v-for="category in listcategory" :key="category.id" :category="category"/>
-        </div>    
+            <threecontent_card v-for="category in listcategory" :key="category.id" :category="category"/>  
+        </div>  
 </template>
 <script>
+import { Carousel, Slide } from 'vue-carousel';
 import threecontent_card from './threecotent_card.vue';
 $(document).ready(function() {
  
@@ -24,7 +25,10 @@ export default {
         }
     },
     components:{
-        threecontent_card
+        threecontent_card,
+        Carousel,
+        Slide
+
     }
 }
 </script>

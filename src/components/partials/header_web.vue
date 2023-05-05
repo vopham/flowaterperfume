@@ -1,6 +1,27 @@
 <script>
     export default{
         name: 'header_web',
+        data(){
+            return{
+                avatar: '',
+                isLogged: localStorage.getItem('token') ? true: false
+            }
+        }, 
+        async created(){
+            var img = window.localStorage.getItem('image');
+            this.avatar = img;
+        },
+        methods:{
+            async logout(){
+                localStorage.removeItem('token');
+                localStorage.removeItem('admin');
+                localStorage.removeItem('name');
+                localStorage.removeItem('image');
+                window.location.href = '/login';
+            },
+        },
+        components:{
+        }
     }
 </script>
 
@@ -8,10 +29,10 @@
   <div class="header_container mt-2 mb-2">
         <div class="container text-center">
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-sm-8">
                     <div class="header_nav">
-                        <div class="col-sm-2">
-                            <section>
+                        <div class="col-sm-3">
+                            <router-link to="/">
                                 <div class="water">
                                     <h3>flow
                                         <div class="img_logo">
@@ -26,10 +47,10 @@
                                         ter
                                     </h3>
                                 </div>
-                            </section>
+                            </router-link>
 
                         </div>
-                        <nav class="col-sm-10">
+                        <nav class="col-sm-9">
                             <ul class="nav justify-content-flex-start margin_20px">
                                 <li class="nav-item navhover">
                                     <router-link class="nav-link" to="/">
@@ -58,19 +79,6 @@
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <router-link class="nav-link" to="/gioitinh">
-                                        <section class="services">
-                                            <div class="content">
-                                                <div class="box">
-                                                    <div class="inner">
-                                                        <div class="nav_text">Giới tính</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </section>
-                                    </router-link>
-                                </li>
-                                <li class="nav-item">
                                     <router-link class="nav-link" to="/about">
                                         <section class="services">
                                             <div class="content">
@@ -87,23 +95,28 @@
                         </nav>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="header_login margin_20px">
                         <ul class="header_justify">
                             <li class="header_login_item">
-                                <a class="nav-link" href="#">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </a>
                             </li>
                             <li class="header_login_item">
-                                <a class="nav-link" href="#">
+                                <router-link class="nav-link" to="/cart">
                                     <i class="fa-solid fa-cart-shopping"></i>
-                                </a>
+                                </router-link>
                             </li>
                             <li class="header_login_item">
                                 <router-link class="nav-link" to="/login">
                                     <i class="fa-solid fa-user"></i>
                                 </router-link>
+                            </li>
+                            <li class="header_login_item">
+                                <button v-if="isLogged" @click="logout" class="nav-link">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                </button>
+                            </li>
+                            <li class="header_login_avatar">
+                               <router-link to="/profile" v-if="isLogged" class="helloavatar"><img class="avatar" :src="avatar" alt=""></router-link>
                             </li>
                         </ul>
                     </div>
@@ -124,6 +137,20 @@
 }
 .header_nav{
     display: flex;
+}
+.helloavatar{
+    width: 40px;
+}
+.avatar{
+    width: 35px;
+    border-radius: 40px;
+    height: 35px; 
+}
+.header_login_avatar{
+    position: relative;
+    bottom: 3px;
+    list-style: none;
+    margin: 0 30px;
 }
 .nav_text{
     font-family: 'Josefin_Sans';
@@ -186,7 +213,7 @@
 
 .header_justify{
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     padding: 10px;
 }
 .header_login_item{
@@ -253,4 +280,7 @@
 	}
 }
 /* end */
+/* search */
+
+
 </style>

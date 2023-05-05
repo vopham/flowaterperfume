@@ -22,7 +22,6 @@
     async mounted(){
       const res = await axios.get('http://localhost:3000/category/getall')
       this.listcategory = res.data
-      console.log(this.listcategory);
     },
       props:{
   
@@ -39,7 +38,7 @@
     padding: 20px;
     font-family: 'Josefin_Sans';
     font-size: 24px;
-    background-color: #0c1449;
-    color: #fac39e;
+    background-color: #dbdbdb;
+    color: #000000;
   }
   </style>

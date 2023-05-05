@@ -1,12 +1,11 @@
 <template>
-    <card_products v-for="product in listproducts" :key="product.id" :products="product"/>
+    <HintProduct v-for="product in listproducts" :key="product.id" :products="product"/>
 </template>
 
 <script>
-import card_products from './card_products.vue';
+import HintProduct from '../../partials/detail_partials/hint_product.vue'
 
 export default {
-    
     props:{
         listproducts:{
             type: Array,
@@ -14,7 +13,7 @@ export default {
         }
     },
     components:{
-        card_products
+        HintProduct
     }
 }
 </script>

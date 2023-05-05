@@ -1,9 +1,9 @@
 <template>
-    <card_products v-for="product in listproducts" :key="product.id" :products="product"/>
+    <hottrongtuancard v-for="product in listproducts" :key="product.id" :products="product"/>
 </template>
 
 <script>
-import card_products from './card_products.vue';
+import hottrongtuancard from './hottrongtuancard.vue';
 
 export default {
     
@@ -14,7 +14,7 @@ export default {
         }
     },
     components:{
-        card_products
+        hottrongtuancard
     }
 }
 </script>

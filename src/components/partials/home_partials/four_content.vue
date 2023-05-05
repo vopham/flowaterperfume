@@ -1,43 +1,55 @@
 <script>
-import title_content from '../home_partials/title_content.vue';
+
 import cart_product from './cart_product.vue';
+import hottrongtuan from '../home_partials/hottrongtuan.vue';
+import title_content from '../home_partials/title_content.vue';
 export default {
   data (){
     return {
-      price: '200.000',
+      listproducts:[],
       title: 'Hot trong tuần'
     }
   },
    components:{
     cart_product,
-    title_content
-   }
+    title_content,
+    hottrongtuan,
+
+   },
+   async mounted(){
+    const res = await axios.get('http://localhost:3000/product/getall')
+
+    const respone = res.data;
+    for(let i = 0; i< 4; i++){
+      this.listproducts.push(respone[i]);
+    }
+  },
   }
 </script>
 
 <template>
 <div class="four_container">
-    <title_content :title="title"/>
 
-    <div class="row">
-        <div class="col-3">
-          <cart_product :price_product="price"/>
-        </div>
-        <div class="col-3">
-          <cart_product/>
-        </div>
-        <div class="col-3">
-          <cart_product/>
-        </div>
-        <div class="col-3">
-          <cart_product/>
-        </div>
-        
+  <title_content :title="title"/>
+  
+    <div class = "row">
+      <hottrongtuan :listproducts="listproducts"/>
     </div>
 </div>
 </template>
 
 <style scoped>
+.title_pageproducts{
+  width: 100%;
+  height: 100px;
+}
+.text_title{
+  text-align: center;
+  font-size: 50px;
+  font-family: 'Josefin_Sans';
+  font-weight: 300;
+  padding: 14px;
+}
 .left_content{
     height: 80%;
     width: 80%;
