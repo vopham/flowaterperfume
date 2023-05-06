@@ -40,17 +40,17 @@
 </template>
 
 <script>
-$(document).ready(function() {
+// $(document).ready(function() {
  
- $(".owl-carousel").owlCarousel({
-    loop:true,
-    autoPlay: true,
-    slideSpeed : 100,
-    responsive: true,
-    items : 5,
- });
+//  $(".owl-carousel").owlCarousel({
+//     loop:true,
+//     autoPlay: true,
+//     slideSpeed : 100,
+//     responsive: true,
+//     items : 5,
+//  });
 
-});
+// });
 export default {
 
 }

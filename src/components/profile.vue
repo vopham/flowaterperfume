@@ -6,6 +6,7 @@
         </div>
     </div>
     <div class="container_info">
+      <router-link to="/edituser" class="edit"><i class="icon fa-solid fa-user-pen"></i></router-link>
       <div class="container_avatar">
         <img class="avatar" :src="user.image" alt="">
       </div>
@@ -84,5 +85,13 @@ export default {
   font-family: 'Josefin_Sans';
   font-weight: 400;
   padding: 10px;
+}
+.edit{
+  width: 30px;
+  height: 50px;
+}
+.icon{
+  font-size: 30px;
+  margin: 25px;
 }
 </style>

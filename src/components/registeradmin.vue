@@ -3,22 +3,27 @@
         <div class="containerr">
             <div class="screen">
                 <div class="screen__content">
-                    <form @submit.prevent="login" class="login">
+                    <form @submit.prevent="register" class="login">
                         <div class="login__field">
-                         
+                            
+                            <input v-model="name" type="text" class="login__input" placeholder="Họ và tên">
+                        </div>
+                        <div class="login__field">
+                           
                             <input v-model="email" type="email" class="login__input" placeholder="Email">
                         </div>
                         <div class="login__field">
-                 
+                            
                             <input v-model="pass" type="password" class="login__input" placeholder="Password">
                         </div>
+						<div>
+							<input v-model="admin" type="checkbox">
+						</div>
                         <button class="button login__submit">
-                            <span class="button__text">Đăng nhập</span>
+                            <span class="button__text">Đăng ký Admin</span>
                         </button>				
                     </form>
-                    <div class="social-login">
-                        <router-link to="/register">Bạn chưa có tài khoản? đăng kí ngay</router-link>
-                    </div>
+
                 </div>
                 <div class="screen__background">
                     <span class="screen__background__shape screen__background__shape4"></span>
@@ -35,34 +40,30 @@
 import axios from 'axios';
 
 export default {
-   data(){
-    return {
-		name: '',
-        email: '',
-        pass:''
-    }
-   },
-   methods: {
-   async login(){
-        const response = await axios.post('http://localhost:3000/user/login',{
+    data(){
+        return{
+            name: '',
+            email: '',
+            pass: ''
+        }
+    },
+    methods:{
+    register(){
+        const data = {
+            name: this.name,
             email: this.email,
-            pass: this.pass
-        });
-        localStorage.setItem('token', response.data.accessToken);
-		localStorage.setItem('admin', response.data.admin);
-		localStorage.setItem('name', response.data.name);
-		localStorage.setItem('image', response.data.image);
-		localStorage.setItem('id', response.data._id);
-		const isAdmin = response.data.admin;
-		console.log(isAdmin)
-		if(isAdmin === true){
-			window.location.href = '/admin';
-		}else{
-			window.location.href = '/';
-		}
-		
-    }
-		
+            pass: this.pass,
+			admin: this.admin
+        }
+        axios.post('http://localhost:3000/user/register', data)
+            .then( res => {
+                console.log(res);
+				this.$router.push('/login')
+            })
+            .catch( err => {
+                console.log(err);
+            })
+    },
    }
 }
 </script>

@@ -30,18 +30,31 @@
                    <div class="title_total">
                         Tổng giá tiền: {{ toVND(this.totalprice)  }}
                    </div> 
-                   <div class="text-center">
-                        <v-btn class="cusbtn"
-                        :loading="loading"
-                        @click="loading = !loading"
-                        >
-                        Đặt hàng
-
-                        <template v-slot:loader>
-                            <v-progress-linear indeterminate></v-progress-linear>
-                        </template>
-                        </v-btn>
+                   <div class="title_total">
+                    Thông tin giao hàng
+                   </div>
+                   <div class="form_info">
+                    <div class="edit_container">
+                        <div class="form">
+                        <div class="input-container ic1">
+                          <input v-model="name"  class="input" type="text" placeholder="Họ và tên" />
+                          <div class="cut"></div>
+                        </div>
+                        <div class="input-container ic2">
+                          <input v-model="address" class="input" type="text" placeholder="Địa chỉ" />
+                          <div class="cut"></div>
+                        </div>
+                        <div class="input-container ic2">
+                          <input v-model="phone" class="input" type="text" placeholder="Số điện thoại" />
+                          <div class="cut"></div>
+                        </div>
+                        <div class="btn_update">
+                          <button @click="dathang" type="text" class="submit">Đặt hàng</button>
+                        </div>
+                        
+                      </div>
                     </div>
+                   </div>
                 </div>
               </div>
                 
@@ -75,13 +88,6 @@ import cart_card from './partials/cart_partials/cart_card.vue'
       this.totalprice = this.totalprice + this.cart[i].total;
       }
     },
-    watch: {
-      loading (val) {
-        if (!val) return
-
-        setTimeout(() => (this.loading = false), 2000)
-      },
-    },
     components:{
       cart_card
     },
@@ -93,8 +99,23 @@ import cart_card from './partials/cart_partials/cart_card.vue'
     },
     methods:{
       toVND(x){
-      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(x)
-    },
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(x)
+      },
+      async dathang(){
+        var cusid = window.localStorage.getItem('id');
+        const data = {
+          cus_id: cusid
+        }
+        await axios.get('http://localhost:3000/bill/getbill',data)
+        .then( res => {
+                console.log(res);
+              alert('Đặt hàng thành công')
+              // this.$router.push('/products')
+            })
+            .catch( err => {
+                console.log(err);
+            })
+      }
     }
   }
 </script>
@@ -120,12 +141,12 @@ import cart_card from './partials/cart_partials/cart_card.vue'
 }
 .container_total{
     width: 98%;
-    height: 150px;
+    height: 559px;
     border: solid 1px #aaa;
 }
 .ctner{
     width: 98%;
-    height: 400px;
+    height: 600px;
 }
 .cusbtn{
     background-color: #ebebeb;
@@ -135,4 +156,137 @@ import cart_card from './partials/cart_partials/cart_card.vue'
     width: 100px;
     height: 100px;
 }
+
+
+
+  body {
+    align-items: center;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .form {
+    margin: 10px auto;
+    background-color: #f3f3f3;
+    box-sizing: border-box;
+    height: 400px;
+    padding: 20px;
+    width: 470px;
+  }
+  
+  .title {
+    color: #2e2d2d;
+    font-family: sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    margin-top: 30px;
+  }
+  .titlee{
+    text-align: center;
+  }
+  .subtitle {
+    color: #eee;
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+  
+  .input-container {
+    height: 50px;
+    position: relative;
+    width: 100%;
+  }
+  
+  .ic1 {
+    margin-top: 40px;
+  }
+  
+  .ic2 {
+    margin-top: 30px;
+  }
+  
+  .input {
+    background-color: #ececec;
+    border-radius: 12px;
+    border: 0;
+    box-sizing: border-box;
+    color: #2e2b2b;
+    font-size: 18px;
+    height: 100%;
+    padding: 4px 20px 0;
+    width: 100%;
+  }
+  
+  .cut {
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    height: 20px;
+    left: 20px;
+    position: absolute;
+    top: -20px;
+    transform: translateY(0);
+    transition: transform 200ms;
+    width: 76px;
+  }
+  
+  .cut-short {
+    width: 50px;
+  }
+  
+  .input:focus ~ .cut,
+  .input:not(:placeholder-shown) ~ .cut {
+    transform: translateY(8px);
+  }
+  
+  .placeholder {
+    color: #ffffff00;
+    font-family: sans-serif;
+    left: 20px;
+    line-height: 14px;
+    pointer-events: none;
+    position: absolute;
+    transform-origin: 0 50%;
+    transition: transform 200ms, color 200ms;
+    top: 20px;
+  }
+  
+  .input:focus ~ .placeholder,
+  .input:not(:placeholder-shown) ~ .placeholder {
+    transform: translateY(-30px) translateX(10px) scale(0.75);
+    color: #ffffff00;
+  }
+  
+  .input:not(:placeholder-shown) ~ .placeholder {
+    color: #ffffff;
+  }
+  
+  .input:focus ~ .placeholder {
+    color: #ffffff00;
+  }
+  
+  .submit {
+    background-color: #08d;
+    border-radius: 12px;
+    border: 0;
+    box-sizing: border-box;
+    color: #eee;
+    cursor: pointer;
+    font-size: 18px;
+    height: 50px;
+    margin-top: 60px;
+    text-align: center;
+    width: 25%;
+  }
+  
+  .submit:active {
+    background-color: #06b;
+  }
+  .btn_update{
+  
+    width: 100%;
+    text-align: center;
+  }
 </style>

@@ -6,17 +6,17 @@
 <script>
 import { Carousel, Slide } from 'vue-carousel';
 import threecontent_card from './threecotent_card.vue';
-$(document).ready(function() {
+// $(document).ready(function() {
  
- $(".owl-carousel").owlCarousel({
-    loop:true,
-    autoPlay: true,
-    slideSpeed : 100,
-    responsive: true,
-    items : 5,
- });
+//  $(".owl-carousel").owlCarousel({
+//     loop:true,
+//     autoPlay: true,
+//     slideSpeed : 100,
+//     responsive: true,
+//     items : 5,
+//  });
 
-});
+// });
 export default {
     props:{
         listcategory:{

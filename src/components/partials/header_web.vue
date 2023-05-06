@@ -4,7 +4,8 @@
         data(){
             return{
                 avatar: '',
-                isLogged: localStorage.getItem('token') ? true: false
+                isLogged: localStorage.getItem('token') ? true: false,
+                isAdmin: localStorage.getItem('admin') === 'true'
             }
         }, 
         async created(){
@@ -53,7 +54,7 @@
                         <nav class="col-sm-9">
                             <ul class="nav justify-content-flex-start margin_20px">
                                 <li class="nav-item navhover">
-                                    <router-link class="nav-link" to="/">
+                                    <router-link v-if="!isAdmin" class="nav-link" to="/">
                                         <section class="services">
                                             <div class="content">
                                                 <div class="box">
@@ -66,7 +67,7 @@
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <router-link class="nav-link" to="/products">
+                                    <router-link v-if="!isAdmin" class="nav-link" to="/products">
                                         <section class="services">
                                             <div class="content">
                                                 <div class="box">
@@ -79,7 +80,7 @@
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <router-link class="nav-link" to="/about">
+                                    <router-link v-if="!isAdmin" class="nav-link" to="/about">
                                         <section class="services">
                                             <div class="content">
                                                 <div class="box">
@@ -101,7 +102,7 @@
                             <li class="header_login_item">
                             </li>
                             <li class="header_login_item">
-                                <router-link class="nav-link" to="/cart">
+                                <router-link v-if="!isAdmin" class="nav-link" to="/cart">
                                     <i class="fa-solid fa-cart-shopping"></i>
                                 </router-link>
                             </li>
@@ -117,6 +118,11 @@
                             </li>
                             <li class="header_login_avatar">
                                <router-link to="/profile" v-if="isLogged" class="helloavatar"><img class="avatar" :src="avatar" alt=""></router-link>
+                            </li>
+                            <li class="header_login_item">
+                                <router-link to="/admin" v-if="isAdmin" class="nav-link">
+                                    <i class="fa-sharp fa-solid fa-unlock"></i>
+                                </router-link>
                             </li>
                         </ul>
                     </div>
