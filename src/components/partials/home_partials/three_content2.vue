@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="owl-carousel mt-3 mb-3">
     <div class="three_item">
         <div class="profile"> <img class="content_three_img" src="https://gostyle.vn/wp-content/uploads/2020/10/y-nghia-chua-ai-biet-ve-logo-cua-thuong-hieu-dior-1.png" alt=""><span class="name">Dior</span></div>
@@ -37,20 +37,56 @@
         <div class="profile"> <img class="content_three_img" src="https://xxivstore.com/wp-content/uploads/2021/07/Nasomatto.png" alt=""><span class="name">Nasomatto</span></div>
     </div>
   </div>
+</template> -->
+  <template>
+  <v-sheet
+  class="mx-auto"
+  max-width="1400"
+  >
+    <v-slide-group
+      show-arrows
+    >
+      <v-slide-group-item>
+        <div>
+           <div class="three_item">
+            <div class="profile"> <img class="content_three_img" src="https://gostyle.vn/wp-content/uploads/2020/10/y-nghia-chua-ai-biet-ve-logo-cua-thuong-hieu-dior-1.png" alt=""><span class="name">Dior</span></div>
+          </div>
+        </div>
+      </v-slide-group-item>
+      <v-slide-group-item>
+        <div>
+           <div class="three_item">
+            <div class="profile"> <img class="content_three_img" src="https://designercomvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2018/09/12034818/thiet-ke-logo-nuoc-hoa-pha-cach-001.jpg" alt=""><span class="name">Gucci</span></div>
+          </div>
+        </div>
+      </v-slide-group-item>
+      <v-slide-group-item>
+        <div>
+           <div class="three_item">
+            <div class="profile"> <img class="content_three_img" src="https://www.thietkewebchuanseo.com/images/brand/mau-thiet-ke-logo-nuoc-hoa-2-min.png" alt=""><span class="name">Calvin Kalein</span></div>
+          </div>
+        </div>
+      </v-slide-group-item>
+      <v-slide-group-item>
+        <div>
+           <div class="three_item">
+            <div class="profile"> <img class="content_three_img" src="https://aitvietnam.com/wp-content/uploads/2022/01/logo-cac-thuong-hieu-thoi-trang-noi-tieng-1.png" alt=""><span class="name">Chanel</span></div>
+          </div>
+        </div>
+      </v-slide-group-item>
+      <v-slide-group-item>
+        <div>
+           <div class="three_item">
+            <div class="profile"> <img class="content_three_img" src="https://traffic-edge05.cdn.vncdn.io/cdn-pos/11108a-1936/brand/20200211_zIm7KAmcm7StySvAddLqoFEa.jpg" alt=""><span class="name">Hermes</span></div>
+          </div>
+        </div>
+      </v-slide-group-item>
+    </v-slide-group>
+  </v-sheet>
 </template>
 
-<script>
-// $(document).ready(function() {
- 
-//  $(".owl-carousel").owlCarousel({
-//     loop:true,
-//     autoPlay: true,
-//     slideSpeed : 100,
-//     responsive: true,
-//     items : 5,
-//  });
 
-// });
+<script>
 export default {
 
 }

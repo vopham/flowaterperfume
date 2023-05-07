@@ -1,26 +1,40 @@
 <template>
     <tr>
        <th scope="row"></th>
-       <td>
-           <img class="imagee" :src="products.image" alt="">
-       </td>
-       <td>{{ products.cus_id }}</td>
-       <td>{{ products.status }} </td>
-       <td>{{ products.totalprice }} </td>  
+       <td>{{ products.name_order }}</td>
+       <td>{{ products.phone_order }}</td>
+       <td>{{ products.address_order }}</td>
+       <td><p  v-for="item in products.bill_items" :key="item">{{ item.name_product }}</p></td>
+       <td><p  v-for="item in products.bill_items" :key="item"> {{item.quantity  }}</p></td>
+       <td>{{ status_order(products.status) }} </td>
+       <td>{{ toVND(products.total_price) }} </td>  
        <td  ><input v-model="status" type="checkbox"></td> 
-       <td class="edit" @click="update">cập nhật</td>  
+       
+       <td><v-btn @click="update">cập nhật</v-btn></td>  
        <td @click="deletee" class="delete" > <i class="fa-solid fa-trash delete_icon"></i></td>
    </tr>
 </template>
 
 <script>
 export default {
-   methods:{
+    data(){
+        return{
+            cart:[],
+        }
+    },
+    methods:{
        toVND(x){
        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(x)
        },
+       status_order(x){
+            if(x === true){
+                return 'Đã xác nhận'
+            }else{
+                return 'Đang xác nhận'
+            }
+       },
        async deletee(){
-           await axios.post('http://localhost:3000/product/'+this.products._id)
+           await axios.post('http://localhost:3000/bill/'+this.products._id)
            .then( res => {
                console.log(res);
                this.$router.go(this.$router.currentRoute)
@@ -31,7 +45,6 @@ export default {
        },
 
         update(){
-        
         const data = {
            status: this.status
         }
@@ -44,14 +57,14 @@ export default {
                 .catch( err => {
                     console.log(err);
                 })
-        }
-
+        },
     },
    props:{
        products:{
            type: Object,
            default: null
        },
+       index: Number
    },
 }
 </script>
@@ -73,4 +86,3 @@ export default {
 }
 </style>
 
-<!-- gửi thêm thông tin khách hàng, sản phẩm vào bill, chỉnh lại trang home -->

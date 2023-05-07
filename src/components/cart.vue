@@ -37,15 +37,15 @@
                     <div class="edit_container">
                         <div class="form">
                         <div class="input-container ic1">
-                          <input v-model="name"  class="input" type="text" placeholder="Họ và tên" />
+                          <input v-model="name_order"  class="input" type="text" placeholder="Họ và tên" />
                           <div class="cut"></div>
                         </div>
                         <div class="input-container ic2">
-                          <input v-model="address" class="input" type="text" placeholder="Địa chỉ" />
+                          <input v-model="address_order" class="input" type="text" placeholder="Địa chỉ" />
                           <div class="cut"></div>
                         </div>
                         <div class="input-container ic2">
-                          <input v-model="phone" class="input" type="text" placeholder="Số điện thoại" />
+                          <input v-model="phone_order" class="input" type="text" placeholder="Số điện thoại" />
                           <div class="cut"></div>
                         </div>
                         <div class="btn_update">
@@ -74,19 +74,22 @@ import cart_card from './partials/cart_partials/cart_card.vue'
     data(){
       return{
         cart:[],
-        totalprice: 0
+        totalprice: 0,
+        name_product: '',
+        quantity: ''
       }
     },
+
     async mounted(){
       var cusid = window.localStorage.getItem('id');
 
       const ress = await axios.get('http://localhost:3000/cart/getcart/'+cusid)
       this.cart = ress.data
-      
-     
+      console.log(this.cart)
       for(var i =0; i< this.cart.length; i++){
       this.totalprice = this.totalprice + this.cart[i].total;
       }
+
     },
     components:{
       cart_card
@@ -102,11 +105,21 @@ import cart_card from './partials/cart_partials/cart_card.vue'
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(x)
       },
       async dathang(){
-        var cusid = window.localStorage.getItem('id');
+        
+        this.quantity = this.cart[0].quantity
+        // for(let i =0; i< this.cart.length; i++){
+          
+        //   console.log(this.name_product)
+        // };
+
         const data = {
-          cus_id: cusid
+          cus_id: window.localStorage.getItem('id'),
+          name_order: this.name_order,
+          phone_order: this.phone_order,
+          address_order: this.address_order,
+          bill_items: this.cart
         }
-        await axios.get('http://localhost:3000/bill/getbill',data)
+        await axios.post('http://localhost:3000/bill/getbill',data)
         .then( res => {
                 console.log(res);
               alert('Đặt hàng thành công')
@@ -141,12 +154,12 @@ import cart_card from './partials/cart_partials/cart_card.vue'
 }
 .container_total{
     width: 98%;
-    height: 559px;
+    height: 650px;
     border: solid 1px #aaa;
 }
 .ctner{
     width: 98%;
-    height: 600px;
+    height: 650px;
 }
 .cusbtn{
     background-color: #ebebeb;
@@ -171,7 +184,7 @@ import cart_card from './partials/cart_partials/cart_card.vue'
     margin: 10px auto;
     background-color: #f3f3f3;
     box-sizing: border-box;
-    height: 400px;
+    height: 490px;
     padding: 20px;
     width: 470px;
   }
@@ -219,7 +232,18 @@ import cart_card from './partials/cart_partials/cart_card.vue'
     padding: 4px 20px 0;
     width: 100%;
   }
-  
+  .inputt{
+    margin-top: 10px;
+    background-color: #ececec;
+    border-radius: 12px;
+    border: 0;
+    box-sizing: border-box;
+    color: #2e2b2b;
+    font-size: 18px;
+    height: 100%;
+    padding: 4px 20px 0;
+    width: 100%;
+  }
   .cut {
     background-color: #f3f3f3;
     border-radius: 10px;
