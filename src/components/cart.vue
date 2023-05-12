@@ -85,11 +85,9 @@ import cart_card from './partials/cart_partials/cart_card.vue'
 
       const ress = await axios.get('http://localhost:3000/cart/getcart/'+cusid)
       this.cart = ress.data
-      console.log(this.cart)
       for(var i =0; i< this.cart.length; i++){
       this.totalprice = this.totalprice + this.cart[i].total;
       }
-
     },
     components:{
       cart_card
@@ -107,11 +105,6 @@ import cart_card from './partials/cart_partials/cart_card.vue'
       async dathang(){
         
         this.quantity = this.cart[0].quantity
-        // for(let i =0; i< this.cart.length; i++){
-          
-        //   console.log(this.name_product)
-        // };
-
         const data = {
           cus_id: window.localStorage.getItem('id'),
           name_order: this.name_order,
@@ -121,9 +114,9 @@ import cart_card from './partials/cart_partials/cart_card.vue'
         }
         await axios.post('http://localhost:3000/bill/getbill',data)
         .then( res => {
-                console.log(res);
+              axios.post('http://localhost:3000/cart/removeallcart');
               alert('Đặt hàng thành công')
-              // this.$router.push('/products')
+              window.location.reload
             })
             .catch( err => {
                 console.log(err);

@@ -18,6 +18,7 @@ import AddProduct from '../components/addproduct.vue';
 import EditProduct from '../components/editproduct.vue';
 import EditUser from '../components/edituser.vue';
 
+
 const routes = [
     {
         path: '/', component: HomePage

@@ -29,9 +29,6 @@ export default {
                console.log(err);
            })
        },
-       async repair(){
-
-       }
    },
    props:{
        products:{
